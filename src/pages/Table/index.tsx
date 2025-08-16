@@ -1,6 +1,5 @@
- 
 const TableList: React.FC<unknown> = () => {
-  return <></>
+  return <></>;
 };
 
 export default TableList;

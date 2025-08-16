@@ -1,7 +1,6 @@
-import React from 'react';
+import { AnalyticsData } from '@/services/analytics';
 import { render, screen } from '@testing-library/react';
 import AnalyticsChart from '../index';
-import { AnalyticsData } from '@/services/analytics';
 
 // Mock ECharts
 jest.mock('echarts-for-react', () => {
@@ -17,48 +16,25 @@ describe('AnalyticsChart', () => {
   };
 
   it('renders chart title correctly', () => {
-    render(
-      <AnalyticsChart
-        title="测试图表"
-        data={mockData}
-        loading={false}
-      />
-    );
+    render(<AnalyticsChart title="测试图表" data={mockData} loading={false} />);
 
     expect(screen.getByText('测试图表')).toBeInTheDocument();
   });
 
   it('shows loading state', () => {
-    render(
-      <AnalyticsChart
-        title="测试图表"
-        data={mockData}
-        loading={true}
-      />
-    );
+    render(<AnalyticsChart title="测试图表" data={mockData} loading={true} />);
 
     expect(document.querySelector('.ant-spin-spinning')).toBeInTheDocument();
   });
 
   it('shows empty state when no data', () => {
-    render(
-      <AnalyticsChart
-        title="测试图表"
-        loading={false}
-      />
-    );
+    render(<AnalyticsChart title="测试图表" loading={false} />);
 
     expect(screen.getByText('暂无数据')).toBeInTheDocument();
   });
 
   it('renders chart when data is provided', () => {
-    render(
-      <AnalyticsChart
-        title="测试图表"
-        data={mockData}
-        loading={false}
-      />
-    );
+    render(<AnalyticsChart title="测试图表" data={mockData} loading={false} />);
 
     expect(screen.getByTestId('echarts-mock')).toBeInTheDocument();
   });
@@ -71,7 +47,7 @@ describe('AnalyticsChart', () => {
         data={mockData}
         loading={false}
         height={customHeight}
-      />
+      />,
     );
 
     const chartContainer = screen.getByTestId('echarts-mock').parentElement;

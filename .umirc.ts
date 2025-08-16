@@ -24,8 +24,6 @@ export default defineConfig({
       path: '/access',
       component: './Access',
     },
-  
   ],
   npmClient: 'yarn',
 });
-

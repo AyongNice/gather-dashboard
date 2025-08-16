@@ -32,7 +32,7 @@ const proxyToRealAPI = (url: string, params?: any): Promise<any> => {
             resolve({
               code: 200,
               message: '操作成功',
-              data: { x: [], y: [] }
+              data: { x: [], y: [] },
             });
           }
         });
@@ -43,7 +43,7 @@ const proxyToRealAPI = (url: string, params?: any): Promise<any> => {
         resolve({
           code: 200,
           message: '操作成功',
-          data: { x: [], y: [] }
+          data: { x: [], y: [] },
         });
       });
 
@@ -52,7 +52,7 @@ const proxyToRealAPI = (url: string, params?: any): Promise<any> => {
         resolve({
           code: 200,
           message: '操作成功',
-          data: { x: [], y: [] }
+          data: { x: [], y: [] },
         });
       });
 
@@ -62,7 +62,7 @@ const proxyToRealAPI = (url: string, params?: any): Promise<any> => {
       resolve({
         code: 200,
         message: '操作成功',
-        data: { x: [], y: [] }
+        data: { x: [], y: [] },
       });
     }
   });
@@ -84,10 +84,15 @@ export default {
   },
 
   // 按项目名统计人数
-  'GET /api/analytics/users/by-project': async (req: Request, res: Response) => {
+  'GET /api/analytics/users/by-project': async (
+    req: Request,
+    res: Response,
+  ) => {
     try {
       const { project } = req.query;
-      const data = await proxyToRealAPI('/api/analytics/users/by-project', { project });
+      const data = await proxyToRealAPI('/api/analytics/users/by-project', {
+        project,
+      });
       res.json(data);
     } catch (error) {
       res.json({
@@ -99,10 +104,16 @@ export default {
   },
 
   // 按 business_data 统计人数
-  'GET /api/analytics/users/by-business-data': async (req: Request, res: Response) => {
+  'GET /api/analytics/users/by-business-data': async (
+    req: Request,
+    res: Response,
+  ) => {
     try {
       const { project } = req.query;
-      const data = await proxyToRealAPI('/api/analytics/users/by-business-data', { project });
+      const data = await proxyToRealAPI(
+        '/api/analytics/users/by-business-data',
+        { project },
+      );
       res.json(data);
     } catch (error) {
       res.json({
@@ -114,10 +125,15 @@ export default {
   },
 
   // 按 system_type 统计人数
-  'GET /api/analytics/users/by-system-type': async (req: Request, res: Response) => {
+  'GET /api/analytics/users/by-system-type': async (
+    req: Request,
+    res: Response,
+  ) => {
     try {
       const { project } = req.query;
-      const data = await proxyToRealAPI('/api/analytics/users/by-system-type', { project });
+      const data = await proxyToRealAPI('/api/analytics/users/by-system-type', {
+        project,
+      });
       res.json(data);
     } catch (error) {
       res.json({
@@ -129,10 +145,15 @@ export default {
   },
 
   // 按 resolution 统计人数
-  'GET /api/analytics/users/by-resolution': async (req: Request, res: Response) => {
+  'GET /api/analytics/users/by-resolution': async (
+    req: Request,
+    res: Response,
+  ) => {
     try {
       const { project } = req.query;
-      const data = await proxyToRealAPI('/api/analytics/users/by-resolution', { project });
+      const data = await proxyToRealAPI('/api/analytics/users/by-resolution', {
+        project,
+      });
       res.json(data);
     } catch (error) {
       res.json({
@@ -144,10 +165,16 @@ export default {
   },
 
   // 按 element_text 统计人数
-  'GET /api/analytics/users/by-element-text': async (req: Request, res: Response) => {
+  'GET /api/analytics/users/by-element-text': async (
+    req: Request,
+    res: Response,
+  ) => {
     try {
       const { project } = req.query;
-      const data = await proxyToRealAPI('/api/analytics/users/by-element-text', { project });
+      const data = await proxyToRealAPI(
+        '/api/analytics/users/by-element-text',
+        { project },
+      );
       res.json(data);
     } catch (error) {
       res.json({
@@ -159,10 +186,15 @@ export default {
   },
 
   // 按 phone_brand 统计人数
-  'GET /api/analytics/users/by-phone-brand': async (req: Request, res: Response) => {
+  'GET /api/analytics/users/by-phone-brand': async (
+    req: Request,
+    res: Response,
+  ) => {
     try {
       const { project } = req.query;
-      const data = await proxyToRealAPI('/api/analytics/users/by-phone-brand', { project });
+      const data = await proxyToRealAPI('/api/analytics/users/by-phone-brand', {
+        project,
+      });
       res.json(data);
     } catch (error) {
       res.json({
@@ -174,10 +206,16 @@ export default {
   },
 
   // 按 phone_version 统计人数
-  'GET /api/analytics/users/by-phone-version': async (req: Request, res: Response) => {
+  'GET /api/analytics/users/by-phone-version': async (
+    req: Request,
+    res: Response,
+  ) => {
     try {
       const { project } = req.query;
-      const data = await proxyToRealAPI('/api/analytics/users/by-phone-version', { project });
+      const data = await proxyToRealAPI(
+        '/api/analytics/users/by-phone-version',
+        { project },
+      );
       res.json(data);
     } catch (error) {
       res.json({
@@ -192,13 +230,109 @@ export default {
   'GET /api/analytics/users/by-hour': async (req: Request, res: Response) => {
     try {
       const { project } = req.query;
-      const data = await proxyToRealAPI('/api/analytics/users/by-hour', { project });
+      const data = await proxyToRealAPI('/api/analytics/users/by-hour', {
+        project,
+      });
       res.json(data);
     } catch (error) {
       res.json({
         code: 200,
         message: '操作成功',
         data: { x: [], y: [] },
+      });
+    }
+  },
+
+  // 按页面停留时间统计人数
+  'GET /api/analytics/users/by-page-remain-time': async (
+    req: Request,
+    res: Response,
+  ) => {
+    try {
+      const { project, duration } = req.query;
+      const data = await proxyToRealAPI(
+        '/api/analytics/users/by-page-remain-time',
+        {
+          project,
+          duration,
+        },
+      );
+      res.json(data);
+    } catch (error) {
+      res.json({
+        code: 200,
+        message: '操作成功',
+        data: { x: [], y: [] },
+      });
+    }
+  },
+
+  // 按资源名称统计人数
+  'GET /api/analytics/users/resources/by-name': async (
+    req: Request,
+    res: Response,
+  ) => {
+    try {
+      const { project, type, min, max, brandId } = req.query;
+      const data = await proxyToRealAPI(
+        '/api/analytics/users/resources/by-name',
+        {
+          project,
+          type,
+          min,
+          max,
+          brandId,
+        },
+      );
+      res.json(data);
+    } catch (error) {
+      res.json({
+        code: 200,
+        message: '操作成功',
+        data: { x: [], y: [] },
+      });
+    }
+  },
+
+  // 获取资源类型列表
+  'GET /api/analytics/users/resources/types': async (
+    req: Request,
+    res: Response,
+  ) => {
+    try {
+      const data = await proxyToRealAPI('/api/analytics/users/resources/types');
+      res.json(data);
+    } catch (error) {
+      res.json({
+        code: 200,
+        message: '操作成功',
+        data: ['js', 'css', 'img', 'font', 'xhr', 'fetch'],
+      });
+    }
+  },
+
+  // 获取手机品牌列表
+  'GET /api/analytics/users/resources/phone-brands': async (
+    req: Request,
+    res: Response,
+  ) => {
+    try {
+      const data = await proxyToRealAPI(
+        '/api/analytics/users/resources/phone-brands',
+      );
+      res.json(data);
+    } catch (error) {
+      res.json({
+        code: 200,
+        message: '操作成功',
+        data: [
+          { id: '2000000000123', name: 'iPhone' },
+          { id: '2000000000124', name: '华为' },
+          { id: '2000000000125', name: '小米' },
+          { id: '2000000000126', name: 'OPPO' },
+          { id: '2000000000127', name: 'vivo' },
+          { id: '2000000000128', name: '三星' },
+        ],
       });
     }
   },

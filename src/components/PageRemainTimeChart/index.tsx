@@ -1,21 +1,70 @@
-import { AnalyticsData } from '@/services/analytics';
-import { Card, Empty, Spin } from 'antd';
+import { AnalyticsData, getUsersByPageRemainTime } from '@/services/analytics';
+import { Card, Empty, Select, Spin } from 'antd';
 import ReactECharts from 'echarts-for-react';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
-interface AnalyticsChartProps {
+const { Option } = Select;
+
+interface PageRemainTimeChartProps {
   title: string;
-  data?: AnalyticsData;
-  loading?: boolean;
+  project: string;
   height?: number;
 }
 
-const AnalyticsChart: React.FC<AnalyticsChartProps> = ({
+// 时间区间选项
+const durationOptions = [
+  { label: '0-1秒', value: '0-1000' },
+  { label: '1-2秒', value: '1000-2000' },
+  { label: '2-3秒', value: '2000-3000' },
+  { label: '3-5秒', value: '3000-5000' },
+  { label: '5-10秒', value: '5000-10000' },
+  { label: '10-30秒', value: '10000-30000' },
+  { label: '30秒-1分钟', value: '30000-60000' },
+  { label: '1-3分钟', value: '60000-180000' },
+  { label: '3分钟以上', value: '180000-999999' },
+];
+
+const PageRemainTimeChart: React.FC<PageRemainTimeChartProps> = ({
   title,
-  data,
-  loading = false,
+  project,
   height = 300,
 }) => {
+  const [data, setData] = useState<AnalyticsData | undefined>();
+  const [loading, setLoading] = useState<boolean>(false);
+  const [selectedDuration, setSelectedDuration] = useState<string>('2000-3000');
+
+  // 获取数据
+  const fetchData = async (duration: string) => {
+    if (!project) return;
+
+    setLoading(true);
+    try {
+      const response = await getUsersByPageRemainTime(project, duration);
+      if (response.code === 200) {
+        setData(response.data);
+      } else {
+        console.error('获取页面停留时间数据失败:', response.message);
+      }
+    } catch (error) {
+      console.error('获取页面停留时间数据失败:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // 时间区间变化处理
+  const handleDurationChange = (duration: string) => {
+    setSelectedDuration(duration);
+    fetchData(duration);
+  };
+
+  // 项目变化时重新获取数据
+  useEffect(() => {
+    if (project) {
+      fetchData(selectedDuration);
+    }
+  }, [project]);
+
   const getOption = () => {
     if (!data) return {};
 
@@ -37,7 +86,7 @@ const AnalyticsChart: React.FC<AnalyticsChartProps> = ({
         left: '10%',
         right: '10%',
         bottom: '15%',
-        top: '10%',
+        top: '15%',
         containLabel: true,
       },
       xAxis: {
@@ -78,19 +127,19 @@ const AnalyticsChart: React.FC<AnalyticsChartProps> = ({
           data: data.y,
           smooth: chartType === 'line',
           itemStyle: {
-            color: '#1890ff',
+            color: '#52c41a',
             borderRadius: chartType === 'bar' ? [4, 4, 0, 0] : 0,
           },
           emphasis: {
             itemStyle: {
-              color: '#40a9ff',
+              color: '#73d13d',
             },
           },
           lineStyle:
             chartType === 'line'
               ? {
                   width: 3,
-                  color: '#1890ff',
+                  color: '#52c41a',
                 }
               : undefined,
           symbol: chartType === 'line' ? 'circle' : undefined,
@@ -117,6 +166,20 @@ const AnalyticsChart: React.FC<AnalyticsChartProps> = ({
         minHeight: '48px',
         padding: '0 16px',
       }}
+      extra={
+        <Select
+          value={selectedDuration}
+          onChange={handleDurationChange}
+          style={{ width: 120 }}
+          size="small"
+        >
+          {durationOptions.map((option) => (
+            <Option key={option.value} value={option.value}>
+              {option.label}
+            </Option>
+          ))}
+        </Select>
+      }
     >
       <div
         style={{
@@ -160,4 +223,4 @@ const AnalyticsChart: React.FC<AnalyticsChartProps> = ({
   );
 };
 
-export default AnalyticsChart;
+export default PageRemainTimeChart;

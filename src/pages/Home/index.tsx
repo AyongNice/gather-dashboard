@@ -1,20 +1,20 @@
-import React, { useState, useEffect } from 'react';
-import { PageContainer } from '@ant-design/pro-components';
-import { Row, Col, Select, message } from 'antd';
-import './index.less';
 import AnalyticsChart from '@/components/AnalyticsChart';
 import {
+  AnalyticsData,
   getProjects,
-  getUsersByProject,
   getUsersByBusinessData,
-  getUsersBySystemType,
-  getUsersByResolution,
   getUsersByElementText,
+  getUsersByHour,
   getUsersByPhoneBrand,
   getUsersByPhoneVersion,
-  getUsersByHour,
-  AnalyticsData,
+  getUsersByProject,
+  getUsersByResolution,
+  getUsersBySystemType,
 } from '@/services/analytics';
+import { PageContainer } from '@ant-design/pro-components';
+import { Col, Row, Select, message } from 'antd';
+import React, { useEffect, useState } from 'react';
+import './index.less';
 
 const { Option } = Select;
 
@@ -36,12 +36,32 @@ const HomePage: React.FC = () => {
   // 图表配置
   const chartConfigs = [
     { key: 'project', title: '按项目名统计人数', api: getUsersByProject },
-    { key: 'businessData', title: '按业务数据统计人数', api: getUsersByBusinessData },
-    { key: 'systemType', title: '按系统类型统计人数', api: getUsersBySystemType },
+    {
+      key: 'businessData',
+      title: '按业务数据统计人数',
+      api: getUsersByBusinessData,
+    },
+    {
+      key: 'systemType',
+      title: '按系统类型统计人数',
+      api: getUsersBySystemType,
+    },
     { key: 'resolution', title: '按分辨率统计人数', api: getUsersByResolution },
-    { key: 'elementText', title: '按元素文本统计人数', api: getUsersByElementText },
-    { key: 'phoneBrand', title: '按手机品牌统计人数', api: getUsersByPhoneBrand },
-    { key: 'phoneVersion', title: '按手机版本统计人数', api: getUsersByPhoneVersion },
+    {
+      key: 'elementText',
+      title: '按元素文本统计人数',
+      api: getUsersByElementText,
+    },
+    {
+      key: 'phoneBrand',
+      title: '按手机品牌统计人数',
+      api: getUsersByPhoneBrand,
+    },
+    {
+      key: 'phoneVersion',
+      title: '按手机版本统计人数',
+      api: getUsersByPhoneVersion,
+    },
     { key: 'hour', title: '按24小时统计人数', api: getUsersByHour },
   ];
 
@@ -67,14 +87,17 @@ const HomePage: React.FC = () => {
   };
 
   // 获取单个图表数据
-  const fetchChartData = async (config: typeof chartConfigs[0], project: string) => {
+  const fetchChartData = async (
+    config: (typeof chartConfigs)[0],
+    project: string,
+  ) => {
     if (!project) return;
 
-    setLoading(prev => ({ ...prev, [config.key]: true }));
+    setLoading((prev) => ({ ...prev, [config.key]: true }));
     try {
       const response = await config.api(project);
       if (response.code === 200) {
-        setChartData(prev => ({ ...prev, [config.key]: response.data }));
+        setChartData((prev) => ({ ...prev, [config.key]: response.data }));
       } else {
         message.error(`获取${config.title}失败`);
       }
@@ -82,7 +105,7 @@ const HomePage: React.FC = () => {
       message.error(`获取${config.title}失败`);
       console.error(`Error fetching ${config.key} data:`, error);
     } finally {
-      setLoading(prev => ({ ...prev, [config.key]: false }));
+      setLoading((prev) => ({ ...prev, [config.key]: false }));
     }
   };
 
@@ -90,7 +113,9 @@ const HomePage: React.FC = () => {
   const fetchAllChartData = async (project: string) => {
     if (!project) return;
 
-    const promises = chartConfigs.map(config => fetchChartData(config, project));
+    const promises = chartConfigs.map((config) =>
+      fetchChartData(config, project),
+    );
     await Promise.all(promises);
   };
 
@@ -127,7 +152,7 @@ const HomePage: React.FC = () => {
               loading={projectsLoading}
               disabled={projectsLoading}
             >
-              {projects.map(project => (
+              {projects.map((project) => (
                 <Option key={project} value={project}>
                   {project}
                 </Option>
@@ -138,7 +163,7 @@ const HomePage: React.FC = () => {
       >
         <div className="chart-container">
           <Row gutter={[16, 16]}>
-            {chartConfigs.map(config => (
+            {chartConfigs.map((config) => (
               <Col xs={16} sm={12} lg={8} xl={6} key={config.key}>
                 <AnalyticsChart
                   title={config.title}
